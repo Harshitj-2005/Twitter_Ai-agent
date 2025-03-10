@@ -19,38 +19,69 @@ const twitterClient = new TwitterApi({
   accessSecret: TWITTER_ACCESS_SECRET,
 });
 
-const AI_PROMPT = `
-You are an **AI-powered Twitter influencer**, dedicated to tweeting about **tech innovations** in AI, programming, and automation.  
+const trendingTopics = [
+  // 💻 Web Development & JavaScript  
+  "Next.js vs. Remix: Which one is the future?",
+  "The rise of AI-powered frontend development",
+  "React Server Components: The next big thing?",
+  "Why Astro is the future of static sites",
+  "WebAssembly: The secret weapon for faster web apps",
+  "Bun vs. Node.js: The JavaScript runtime battle",
+  "JavaScript frameworks that will dominate 2025",
+  "The decline of jQuery: End of an era?",
+  "HTMX: The hidden gem in modern web dev",
+  "Why developers are moving from Tailwind CSS to other solutions",
+  "State management in 2025: The future after Redux?",
+  "Turbopack vs. Vite: The fastest dev server showdown",
+  "Why JavaScript fatigue is real & how to handle it",
+  
+  // 🚀 New Frameworks & Platforms  
+  "Meta’s new AI coding assistant: A game-changer?",
+  "Why Devs are switching to Tauri instead of Electron",
+  "Supabase vs. Firebase: The backend battle",
+  "Deno vs. Node.js: The rise of a new JavaScript runtime",
+  "Cloudflare Workers: The future of serverless?",
+  "The rise of Rust in web development",
+  "Why GoLang is becoming the favorite backend language",
+  "Flutter vs. React Native: What’s winning in 2025?",
+  "Will Solid.js replace React in the future?",
+  "Why developers are loving Qwik.js",
 
-🔹 **Your Goal:** Write **mind-blowing** tweets in simple language about the latest advancements in **AI, dev tools, and futuristic coding stacks**—engaging, informative, and Twitter-optimized!  
+  "AI in web development",
+  "Latest advancements in quantum computing",
+  "Breakthroughs in generative AI",
+  "AI-powered cybersecurity",
+  "How AI is transforming healthcare",
+  "AI-generated music, code, and art",
+  "The rise of humanoid robots",
+  "AI-driven fake news detection",
+  "AI-powered virtual assistants",
+  "Neural networks vs. classical algorithms",
+  "The role of AI in climate change solutions",
+  "AI and the future of space exploration",
+  
+  // 🔧 DevOps, Tools & Automation  
+  "The rise of AI-powered DevOps",
+  "GitHub Copilot X: The future of coding?",
+  "Docker vs. Podman: The future of containerization",
+  "Why Cloudflare is taking over the web",
+  "Vercel vs. Netlify: The ultimate frontend hosting battle",
+  "AI agents in DevOps: Automated debugging & deployments",
+  "How Web3 is transforming cloud computing",
+  "New CI/CD tools that are making DevOps easier",
+  "Google Cloud Run vs. AWS Lambda: Which one wins?",
+  
+  // 📱 Mobile & Emerging Tech  
+  "The future of cross-platform mobile development",
+  "AI-generated apps: No code, no problem?",
+  "Progressive Web Apps (PWA) vs. Native Apps",
+  "WebGPU: The future of high-performance web graphics",
+  "The rise of spatial computing with Apple Vision Pro",
+  "Why developers are excited about OpenAI’s GPT-5",
+  "Apple vs. Meta: The race for AR/VR dominance"
+];
 
-💡 **Tweet Style:**  
-✅ **Short, punchy, and viral**—think like a top-tier tech influencer.  
-✅ **Focus on cutting-edge breakthroughs** (AI agents, self-coding frameworks, quantum computing, etc.).  
-✅ **Mix real news with futuristic speculation** (e.g., "AI is now building entire apps autonomously. What's next? AI running entire companies? 🤯").  
-✅ **Use emojis & hashtags** for engagement.  
-✅ **No corporate jargon**—make it feel **human, witty, and insightful**.  
-
----
-
-📝 **Tweet Examples:**  
-
-🚀 "AI isn’t just coding anymore—it’s **designing entire frameworks**. Meta’s new AI agents can build full-stack apps **with zero human input**. Devs, this is getting wild. 🤯 #AI #WebDev"  
-
-🧠 "Google’s Gemini 1.5 now **processes 1 million tokens** in real-time. Imagine an AI remembering **every convo you ever had**. Next step: **infinite memory?** 🧐 #AGI #AIRevolution"  
-
-💻 "Forget React vs Vue. **AI-first frameworks** are coming! Devs are experimenting with **self-coding UIs**, where AI dynamically **rewrites components** based on user behavior! 🔥 #WebDev #AI"  
-
-🤖 "LLMs were just the start. **Neuro-Symbolic AI** is here—combining deep learning **+ logical reasoning**. AI that actually THINKS instead of guessing? Game over. 🎯 #ArtificialIntelligence"  
-
-🛠️ "AI agents are going **full autonomous**! Imagine an AI DevOps that **monitors, debugs & deploys** your apps **without human help**. AWS & Google Cloud are already testing it! 🌍 #DevOps #AI"  
-
----
-
-🔮 **Now, generate a fresh, engaging tweet about a cutting-edge tech trend. Keep it under 350 characters, viral-worthy, and discussion-driving.** 
-
-Important: give some different news every time while running`;
-
+const dynamicPrompt = `Generate an engaging tweet about ${trendingTopics[Math.floor(Math.random() * trendingTopics.length)]}. Keep it short, fresh, and impactful.`;
 
 async function generateTweet() {
   try {
@@ -58,8 +89,8 @@ async function generateTweet() {
       `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,
       {
         contents: [
-            { parts: [{ text: AI_PROMPT }] }
-          ]
+          { role: "user", parts: [{ text: dynamicPrompt }] }
+        ]
       }
     );
     return response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
