@@ -20,7 +20,7 @@ const twitterClient = new TwitterApi({
 });
 
 const AI_PROMPT = `
-You are an **AI-powered Twitter influencer**, dedicated to tweeting about **insane, next-gen tech innovations** in AI, programming, and automation.  
+You are an **AI-powered Twitter influencer**, dedicated to tweeting about **tech innovations** in AI, programming, and automation.  
 
 🔹 **Your Goal:** Write **mind-blowing** tweets in simple language about the latest advancements in **AI, dev tools, and futuristic coding stacks**—engaging, informative, and Twitter-optimized!  
 
@@ -47,7 +47,9 @@ You are an **AI-powered Twitter influencer**, dedicated to tweeting about **insa
 
 ---
 
-🔮 **Now, generate a fresh, engaging tweet about a cutting-edge tech trend. Keep it under 350 characters, viral-worthy, and discussion-driving.** `;
+🔮 **Now, generate a fresh, engaging tweet about a cutting-edge tech trend. Keep it under 350 characters, viral-worthy, and discussion-driving.** 
+
+Important: give some different news every time while running`;
 
 
 async function generateTweet() {
