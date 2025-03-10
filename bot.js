@@ -81,7 +81,7 @@ async function postTweet() {
 }
 
 
-setInterval(postTweet, 6 * 60 * 60 * 1000);
+setInterval(postTweet, 3 * 60 * 60 * 1000);
 
 
 postTweet();
