@@ -24,7 +24,7 @@ Make sure you have:
 
 ### **1️⃣ Clone the Repo**  
 ```sh
-git clone https://github.com/your-username/twitter-bot.git
+git clone [https://github.com/your-username/twitter-bot.git](https://github.com/Harshitj-2005/Twitter_Ai-agent.git)
 cd twitter-bot
 ```
 
