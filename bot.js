@@ -81,7 +81,7 @@ const trendingTopics = [
   "Apple vs. Meta: The race for AR/VR dominance"
 ];
 
-const dynamicPrompt = `Generate an engaging tweet about ${trendingTopics[Math.floor(Math.random() * trendingTopics.length)]}. Keep it short, fresh, and impactful and write tweet in human tone. tweet should be based on latest news of market`;
+const dynamicPrompt = `Generate an engaging tweet about ${trendingTopics[Math.floor(Math.random() * trendingTopics.length)]}. Keep it short, fresh, and impactful and write tweet in human tone and set language very easy. tweet should be based on latest news of market`;
 
 async function generateTweet() {
   try {
