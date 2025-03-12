@@ -1,17 +1,15 @@
 require("dotenv").config();
 const { TwitterApi } = require("twitter-api-v2");
 const axios = require("axios");
-
+const Parser = require("rss-parser");
 
 const {
     TWITTER_API_KEY,
     TWITTER_API_SECRET,
     TWITTER_ACCESS_TOKEN,
     TWITTER_ACCESS_SECRET,
-    GEMINI_API_KEY,
-    GNEWS_API_KEY,
+    GEMINI_API_KEY
 } = process.env;
-
 
 const twitterClient = new TwitterApi({
     appKey: TWITTER_API_KEY,
@@ -20,50 +18,44 @@ const twitterClient = new TwitterApi({
     accessSecret: TWITTER_ACCESS_SECRET,
 });
 
-async function generateNews() {
+const parser = new Parser();
+
+// RSS Feed URL (Change this based on your preferred news source)
+const RSS_FEED_URL = "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml";
+
+async function fetchNews() {
     try {
-        const news = await axios.get(
-            `https://gnews.io/api/v4/top-headlines?category=technology&lang=en&apikey=${GNEWS_API_KEY}`
-        );
-        const articles = news.data.articles;
-
-        if (!articles || articles.length === 0) {
-            return "Tech is evolving, stay updated! 🚀";
+        const feed = await parser.parseURL(RSS_FEED_URL);
+        if (!feed.items || feed.items.length === 0) {
+            return "No news available at the moment!";
         }
-        const randomArticle = articles[Math.floor(Math.random() * articles.length)];
-
-        return randomArticle.description || randomArticle.title;
-    }
-    catch (error) {
+        const randomArticle = feed.items[Math.floor(Math.random() * feed.items.length)];
+        return `${randomArticle.title} - ${randomArticle.link}`;
+    } catch (error) {
         console.error("Error fetching news:", error.message);
-        return "Stay updated with the latest tech trends! 🚀";
+        return "Tech is evolving fast! Stay updated. 🚀";
     }
 }
 
-
-
-async function generateTweet() {
+async function generateTweet(newsText) {
     try {
-        const newsdetail = await generateNews()
         const response = await axios.post(
             `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,
             {
-                contents: [
-                    { parts: [{ text: newsdetail }] }
-                ]
+                contents: [{ parts: [{ text: `Summarize this for Twitter. Do this in crisp and human tone. add hastag according to trend so that it come in trend: ${newsText}` }] }]
             }
         );
-        return response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
+        return response.data?.candidates?.[0]?.content?.parts?.[0]?.text || newsText;
     } catch (error) {
         console.error("Error generating tweet:", error.response?.data || error.message);
-        return "AI is changing the world, stay ahead of the curve! 🚀";
+        return newsText;
     }
 }
 
-
 async function postTweet() {
     try {
-        const tweet = await generateTweet();
+        const news = await fetchNews();
+        const tweet = await generateTweet(news);
         await twitterClient.v2.tweet(tweet);
         console.log("Tweet posted:", tweet);
     } catch (error) {
@@ -71,8 +63,6 @@ async function postTweet() {
     }
 }
 
-
-setInterval(postTweet, 6 * 60 * 60 * 1000);
-
-
+// Post a tweet every 6 hours
+setInterval(postTweet, 3 * 60 * 60 * 1000);
 postTweet();
