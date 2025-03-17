@@ -20,7 +20,7 @@ const twitterClient = new TwitterApi({
 
 const parser = new Parser();
 
-// RSS Feed URL (Change this based on your preferred news source)
+
 const RSS_FEED_URL = "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml";
 
 async function fetchNews() {
@@ -63,6 +63,5 @@ async function postTweet() {
     }
 }
 
-// Post a tweet every 6 hours
-setInterval(postTweet, 3 * 60 * 60 * 1000);
+setInterval(postTweet, 6 * 60 * 60 * 1000);
 postTweet();
