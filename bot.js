@@ -42,7 +42,7 @@ async function generateTweet(newsText) {
         const response = await axios.post(
             `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,
             {
-                contents: [{ parts: [{ text: `Summarize this for Twitter. Do this in crisp and human tone. add hastag according to trend so that it come in trend: ${newsText}` }] }]
+                contents: [{ parts: [{ text: `Summarize this for Twitter. Do this in crisp and human tone. add hastag according to trend so that it come in trend: ${newsText}. write it in hinglish means hindi and english mix.` }] }]
             }
         );
         return response.data?.candidates?.[0]?.content?.parts?.[0]?.text || newsText;
